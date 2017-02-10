@@ -1,7 +1,10 @@
 package com.example.controller;
 
 import com.example.entities.Contacts;
+import com.example.entities.Student;
 import com.example.services.ContactRepository;
+import com.example.services.StudentRepository;
+import com.example.services.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +20,10 @@ import java.util.List;
 public class CodeAfricaTrialController {
     @Autowired
     ContactRepository contacts;
+    @Autowired
+    UserRepository users;
+    @Autowired
+    StudentRepository students;
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
     public String contacts(Model model){
@@ -42,8 +49,20 @@ public class CodeAfricaTrialController {
         return "index";
     }
 
-    @RequestMapping(path = "/contactUs")
+    @RequestMapping(path = "/contact")
     public String reach() {
+        return "index";
+    }
+
+    @RequestMapping(path = "add-student", method = RequestMethod.POST)
+    public String addStudent(String name, String email, String phone){
+        Student student = new Student(name, email, phone);
+        students.save(student);
+        return "redirect:/";
+    }
+
+    @RequestMapping(path = "/student")
+    public String student(){
         return "index";
     }
 
