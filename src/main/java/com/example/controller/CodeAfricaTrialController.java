@@ -2,6 +2,7 @@ package com.example.controller;
 
 import com.example.entities.Contacts;
 import com.example.entities.Student;
+import com.example.entities.User;
 import com.example.services.ContactRepository;
 import com.example.services.StudentRepository;
 import com.example.services.UserRepository;
@@ -11,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -63,7 +65,20 @@ public class CodeAfricaTrialController {
 
     @RequestMapping(path = "/student")
     public String student(){
-        return "index";
+        return "student";
     }
+    @RequestMapping("/login")
+    public String login(String username, String password, HttpSession session) throws Exception{
+        session.setAttribute("username", username);
+
+        User user = users.findOneByName(username);
+        if (user == null){
+            user = new User();
+            user.name = username;
+            users.save(user);
+        }
+        return "redirect:/";
+    }
+
 
 }
