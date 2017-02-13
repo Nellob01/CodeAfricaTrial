@@ -21,16 +21,14 @@ public class Contacts {
     @Column(nullable = false)
     String phone;
 
-    @Column
-    String comments;
 
     public Contacts() {
     }
 
-    public Contacts(String name, String email, String phone, String comments) {
+    public Contacts(String name, String email, String phone) {
         this.name = name;
         this.email = email;
         this.phone = phone;
-        this.comments = comments;
+
     }
 }

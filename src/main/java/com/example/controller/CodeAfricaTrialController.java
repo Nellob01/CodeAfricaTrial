@@ -7,6 +7,7 @@ import com.example.services.ContactRepository;
 import com.example.services.StudentRepository;
 import com.example.services.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,8 +37,8 @@ public class CodeAfricaTrialController {
     }
 
     @RequestMapping(path = "/add-contact", method = RequestMethod.POST)
-    public String addContact(String contactName, String contactEmail, String contactPhone, String contactComments){
-        Contacts contact = new Contacts(contactName, contactEmail, contactPhone, contactComments);
+    public String addContact(String name, String email, String phone){
+        Contacts contact = new Contacts(name, email, phone);
         contacts.save(contact);
         return "redirect:/";
     }
@@ -67,7 +68,7 @@ public class CodeAfricaTrialController {
     public String student(){
         return "student";
     }
-    @RequestMapping("/login")
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String login(String username, String password, HttpSession session) throws Exception{
         session.setAttribute("username", username);
 
@@ -77,7 +78,28 @@ public class CodeAfricaTrialController {
             user.name = username;
             users.save(user);
         }
-        return "redirect:/";
+        return "redirect:/login";
+    }
+    @RequestMapping(value = "login", method = RequestMethod.GET)
+    public String admin(HttpSession session, Model model){
+        String userName = (String) session.getAttribute("username");
+        User user = users.findOneByName(userName);
+        if(user != null){
+            model.addAttribute("user", user);
+        }
+        List<Contacts> contactList;
+        contactList = (List<Contacts>) contacts.findAll();
+        model.addAttribute("contacts", contactList);
+
+        List<Student> studentList;
+        studentList = (List<Student>) students.findAll();
+        model.addAttribute("students", studentList);
+        return "login";
+
+
+
+
+
     }
 
 
